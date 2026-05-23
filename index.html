@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMENA — Premium Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  /* ── Design tokens ── */
+  :root {
+    --bg:        #F7F5F0;
+    --surface:   #FFFFFF;
+    --ink:       #1A1814;
+    --ink-2:     #6B6760;
+    --ink-3:     #B0ADA8;
+    --accent:    #C8A97E;
+    --accent-dk: #9C7A52;
+    --border:    rgba(26,24,20,0.10);
+    --border-md: rgba(26,24,20,0.18);
+    --radius:    6px;
+    --radius-lg: 14px;
+    --shadow:    0 2px 24px rgba(26,24,20,0.08);
+    --font-serif:'Cormorant Garamond', Georgia, serif;
+    --font-sans: 'DM Sans', system-ui, sans-serif;
+    --transition: 0.22s cubic-bezier(.4,0,.2,1);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font-sans); background: var(--bg); color: var(--ink); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+  /* ── Typography ── */
+  h1,h2,h3,h4 { font-family: var(--font-serif); font-weight: 300; line-height: 1.2; }
+  h1 { font-size: clamp(2.8rem, 6vw, 5rem); }
+  h2 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); }
+  h3 { font-size: 1.3rem; }
+
+  /* ── Layout ── */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+  section { padding: 6rem 0; }
+
+  /* ── Topbar / Language switcher ── */
+  #topbar {
+    background: var(--ink); color: var(--ink-3);
+    font-size: 12px; letter-spacing: .06em; text-transform: uppercase;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.55rem 2rem;
+  }
+  #topbar span { color: var(--accent); }
+  .lang-btns { display: flex; gap: 6px; }
+  .lang-btn {
+    background: transparent; border: 1px solid rgba(255,255,255,0.15);
+    color: var(--ink-3); padding: 2px 10px; border-radius: 3px;
+    cursor: pointer; font-size: 11px; letter-spacing: .05em; font-family: var(--font-sans);
+    transition: var(--transition);
+  }
+  .lang-btn:hover, .lang-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  /* ── Header / Nav ── */
+  header {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem; height: 68px;
+    box-shadow: 0 1px 0 var(--border);
+  }
+  .logo { font-family: var(--font-serif); font-size: 1.7rem; font-weight: 400; letter-spacing: .12em; color: var(--ink); text-decoration: none; }
+  .logo em { font-style: italic; color: var(--accent); }
+  nav { display: flex; gap: 2.2rem; }
+  nav a { text-decoration: none; color: var(--ink-2); font-size: 13px; letter-spacing: .04em; font-weight: 400; transition: var(--transition); position: relative; }
+  nav a::after { content:''; position:absolute; bottom:-3px; left:0; width:0; height:1px; background:var(--accent); transition:var(--transition); }
+  nav a:hover { color: var(--ink); }
+  nav a:hover::after { width:100%; }
+  .header-actions { display: flex; align-items: center; gap: 1rem; }
+  .cart-btn {
+    background: var(--ink); color: #fff; border: none;
+    padding: 0.5rem 1.2rem; border-radius: var(--radius);
+    font-family: var(--font-sans); font-size: 13px; cursor: pointer;
+    display: flex; align-items: center; gap: 7px; transition: var(--transition);
+  }
+  .cart-btn:hover { background: var(--accent-dk); }
+  .cart-count {
+    background: var(--accent); color: #fff; border-radius: 50%;
+    width: 18px; height: 18px; display: inline-flex; align-items: center;
+    justify-content: center; font-size: 11px; font-weight: 500;
+  }
+  .search-btn {
+    background: transparent; border: 1px solid var(--border-md); border-radius: var(--radius);
+    padding: 0.5rem 1rem; font-family: var(--font-sans); font-size: 13px;
+    color: var(--ink-2); cursor: pointer; display: flex; align-items: center; gap: 6px;
+    transition: var(--transition);
+  }
+  .search-btn:hover { border-color: var(--accent); color: var(--ink); }
+
+  /* ── Hero ── */
+  #hero {
+    background: var(--surface); padding: 0;
+    display: grid; grid-template-columns: 1fr 1fr; min-height: 88vh; overflow: hidden;
+  }
+  .hero-text {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 5rem 3rem 5rem 2rem; max-width: 580px; margin-left: auto;
+  }
+  .hero-tag { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.6rem; }
+  .hero-text h1 { margin-bottom: 1.4rem; }
+  .hero-text h1 em { font-style: italic; color: var(--accent); }
+  .hero-text p { color: var(--ink-2); font-size: 1.05rem; line-height: 1.7; margin-bottom: 2.4rem; max-width: 420px; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--ink); color: #fff; text-decoration: none;
+    padding: 0.9rem 2rem; border-radius: var(--radius); font-size: 13px;
+    letter-spacing: .04em; font-weight: 500; border: none; cursor: pointer;
+    transition: var(--transition); font-family: var(--font-sans);
+  }
+  .btn-primary:hover { background: var(--accent-dk); transform: translateY(-1px); }
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: transparent; color: var(--ink); text-decoration: none;
+    padding: 0.9rem 2rem; border-radius: var(--radius); font-size: 13px;
+    letter-spacing: .04em; font-weight: 500; border: 1.5px solid var(--border-md); cursor: pointer;
+    transition: var(--transition); font-family: var(--font-sans);
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .hero-image {
+    background: linear-gradient(135deg, #EDE9E0 0%, #D4C5A9 100%);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .hero-image .product-float {
+    width: 320px; height: 400px;
+    background: var(--surface);
+    border-radius: 20px;
+    box-shadow: 0 32px 64px rgba(26,24,20,0.18);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transform: rotate(-3deg);
+    position: relative; z-index: 2;
+  }
+  .hero-image .product-float .p-icon { font-size: 5rem; margin-bottom: 1rem; }
+  .hero-image .product-float .p-name { font-family: var(--font-serif); font-size: 1.3rem; color: var(--ink); }
+  .hero-image .product-float .p-price { color: var(--accent); font-weight: 500; font-size: 1.1rem; margin-top: 0.4rem; }
+  .hero-badge {
+    position: absolute; top: 2.5rem; right: 2.5rem;
+    background: var(--ink); color: #fff; border-radius: 50%;
+    width: 90px; height: 90px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 10px; letter-spacing: .08em; text-transform: uppercase; z-index: 3;
+    animation: spin 12s linear infinite;
+  }
+  .hero-badge strong { font-size: 1.1rem; font-family: var(--font-serif); }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .hero-stats { display: flex; gap: 2.5rem; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+  .hero-stat .num { font-family: var(--font-serif); font-size: 1.8rem; color: var(--ink); }
+  .hero-stat .lbl { font-size: 12px; color: var(--ink-3); letter-spacing: .04em; }
+
+  /* ── Category Pills ── */
+  #categories { padding: 3rem 0; border-bottom: 1px solid var(--border); }
+  .cat-pills { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .cat-pill {
+    background: var(--surface); border: 1px solid var(--border-md);
+    border-radius: 40px; padding: 0.5rem 1.4rem; font-size: 13px;
+    color: var(--ink-2); cursor: pointer; transition: var(--transition); font-family: var(--font-sans);
+  }
+  .cat-pill:hover, .cat-pill.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  /* ── Filters + Sort ── */
+  .catalog-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: gap; gap: 1rem; }
+  .catalog-title { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 300; }
+  .filter-row { display: flex; align-items: center; gap: 0.75rem; }
+  .filter-select {
+    border: 1px solid var(--border-md); border-radius: var(--radius); padding: 0.45rem 1rem;
+    font-size: 13px; background: var(--surface); color: var(--ink);
+    font-family: var(--font-sans); cursor: pointer;
+  }
+
+  /* ── Product Grid ── */
+  .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
+  .product-card {
+    background: var(--surface); border-radius: var(--radius-lg);
+    border: 1px solid var(--border); overflow: hidden;
+    transition: var(--transition); cursor: pointer;
+    position: relative;
+  }
+  .product-card:hover { box-shadow: var(--shadow); transform: translateY(-3px); border-color: var(--border-md); }
+  .product-card.hidden { display: none; }
+  .prod-img {
+    height: 220px; display: flex; align-items: center; justify-content: center;
+    font-size: 4.5rem; position: relative;
+    transition: var(--transition);
+  }
+  .product-card:hover .prod-img { transform: scale(1.03); }
+  .prod-badge {
+    position: absolute; top: 12px; left: 12px;
+    font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 3px; font-weight: 500;
+  }
+  .badge-new { background: var(--accent); color: #fff; }
+  .badge-sale { background: #D05A3E; color: #fff; }
+  .badge-hot { background: var(--ink); color: #fff; }
+  .prod-fav {
+    position: absolute; top: 10px; right: 12px;
+    background: rgba(255,255,255,0.9); border: none; border-radius: 50%;
+    width: 34px; height: 34px; cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: var(--transition); opacity: 0;
+  }
+  .product-card:hover .prod-fav { opacity: 1; }
+  .prod-fav:hover { background: #fff; transform: scale(1.1); }
+  .prod-body { padding: 1.1rem 1.2rem 1.3rem; }
+  .prod-cat { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+  .prod-name { font-family: var(--font-serif); font-size: 1.1rem; color: var(--ink); margin-bottom: 6px; line-height: 1.3; }
+  .prod-rating { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--ink-3); margin-bottom: 12px; }
+  .prod-rating span { color: #E8B84B; letter-spacing: -1px; }
+  .prod-footer { display: flex; align-items: center; justify-content: space-between; }
+  .prod-price { font-family: var(--font-serif); font-size: 1.25rem; }
+  .prod-price .old { text-decoration: line-through; color: var(--ink-3); font-size: 0.9rem; margin-right: 6px; }
+  .add-btn {
+    background: var(--ink); color: #fff; border: none; border-radius: var(--radius);
+    padding: 0.5rem 1rem; font-size: 12px; cursor: pointer; font-family: var(--font-sans);
+    transition: var(--transition); letter-spacing: .03em;
+  }
+  .add-btn:hover { background: var(--accent-dk); }
+  .add-btn.added { background: #3E7D4E; }
+
+  /* ── Features ── */
+  #features { background: var(--ink); color: #fff; }
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; }
+  .feature-card { padding: 1.8rem; border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-lg); }
+  .feat-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .feature-card h3 { font-family: var(--font-serif); font-size: 1.1rem; font-weight: 400; margin-bottom: 0.5rem; color: #fff; }
+  .feature-card p { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.7; }
+
+  /* ── Testimonials ── */
+  #testimonials { background: var(--surface); }
+  .section-label { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; }
+  .section-title { margin-bottom: 3rem; }
+  .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+  .testimonial-card { background: var(--bg); border-radius: var(--radius-lg); padding: 1.8rem; border: 1px solid var(--border); }
+  .test-stars { color: #E8B84B; margin-bottom: 1rem; letter-spacing: -1px; font-size: 14px; }
+  .test-text { font-family: var(--font-serif); font-size: 1.05rem; font-style: italic; color: var(--ink); margin-bottom: 1.2rem; line-height: 1.7; }
+  .test-author { display: flex; align-items: center; gap: 10px; }
+  .test-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; }
+  .test-name { font-size: 13px; font-weight: 500; }
+  .test-loc { font-size: 11px; color: var(--ink-3); }
+
+  /* ── Cart sidebar ── */
+  #cart-overlay {
+    position: fixed; inset: 0; background: rgba(26,24,20,0.5);
+    z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s;
+  }
+  #cart-overlay.open { opacity: 1; pointer-events: all; }
+  #cart-panel {
+    position: fixed; top: 0; right: 0; width: 420px; max-width: 95vw;
+    height: 100vh; background: var(--surface); z-index: 201;
+    transform: translateX(100%); transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  #cart-panel.open { transform: translateX(0); }
+  .cart-header { padding: 1.5rem 1.5rem 1rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .cart-header h2 { font-family: var(--font-serif); font-size: 1.4rem; font-weight: 400; }
+  .close-btn { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--ink-2); line-height: 1; }
+  .cart-items { flex: 1; overflow-y: auto; padding: 1rem 1.5rem; }
+  .cart-item { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--border); }
+  .cart-item-img { width: 68px; height: 68px; background: var(--bg); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 2rem; flex-shrink: 0; }
+  .cart-item-info { flex: 1; }
+  .cart-item-name { font-family: var(--font-serif); font-size: 1rem; margin-bottom: 3px; }
+  .cart-item-price { font-size: 13px; color: var(--accent); font-weight: 500; }
+  .cart-item-qty { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+  .qty-btn { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; width: 26px; height: 26px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+  .qty-num { font-size: 13px; min-width: 20px; text-align: center; }
+  .rm-btn { background: none; border: none; color: var(--ink-3); cursor: pointer; font-size: 16px; margin-left: auto; transition: var(--transition); }
+  .rm-btn:hover { color: #D05A3E; }
+  .cart-empty { text-align: center; padding: 3rem 1rem; color: var(--ink-3); }
+  .cart-empty .e-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+  .cart-footer { padding: 1.2rem 1.5rem; border-top: 1px solid var(--border); }
+  .cart-summary { margin-bottom: 1rem; }
+  .cart-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink-2); margin-bottom: 6px; }
+  .cart-row.total { font-size: 1.1rem; font-family: var(--font-serif); color: var(--ink); font-weight: 400; border-top: 1px solid var(--border); padding-top: 10px; margin-top: 8px; }
+  .checkout-btn { width: 100%; background: var(--ink); color: #fff; border: none; padding: 1rem; border-radius: var(--radius); font-family: var(--font-sans); font-size: 14px; letter-spacing: .04em; cursor: pointer; transition: var(--transition); }
+  .checkout-btn:hover { background: var(--accent-dk); }
+
+  /* ── Payment modal ── */
+  #pay-overlay {
+    position: fixed; inset: 0; background: rgba(26,24,20,0.6);
+    z-index: 300; display: none; align-items: center; justify-content: center;
+  }
+  #pay-overlay.open { display: flex; }
+  #pay-modal {
+    background: var(--surface); border-radius: var(--radius-lg);
+    width: 480px; max-width: 95vw; max-height: 90vh; overflow-y: auto;
+    box-shadow: 0 24px 60px rgba(26,24,20,0.24);
+  }
+  .pay-header { padding: 1.5rem 1.8rem 1rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .pay-header h2 { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 300; }
+  .pay-body { padding: 1.5rem 1.8rem; }
+  .pay-tabs { display: flex; gap: 0; margin-bottom: 1.5rem; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .pay-tab { flex: 1; background: transparent; border: none; padding: 0.7rem; font-size: 13px; cursor: pointer; font-family: var(--font-sans); color: var(--ink-2); transition: var(--transition); }
+  .pay-tab.active { background: var(--ink); color: #fff; }
+  .field-group { margin-bottom: 1.1rem; }
+  .field-group label { display: block; font-size: 12px; letter-spacing: .04em; color: var(--ink-2); margin-bottom: 6px; text-transform: uppercase; }
+  .field-group input, .field-group select {
+    width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border-md);
+    border-radius: var(--radius); font-family: var(--font-sans); font-size: 14px;
+    color: var(--ink); background: var(--surface); transition: var(--transition);
+  }
+  .field-group input:focus, .field-group select:focus { outline: none; border-color: var(--accent); }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .card-icons { display: flex; gap: 8px; margin-bottom: 1rem; }
+  .card-icon { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 5px 10px; font-size: 11px; color: var(--ink-2); font-weight: 500; letter-spacing: .04em; }
+  .pay-total { background: var(--bg); border-radius: var(--radius); padding: 1rem 1.2rem; margin-bottom: 1.3rem; display: flex; justify-content: space-between; align-items: center; }
+  .pay-total .label { font-size: 13px; color: var(--ink-2); }
+  .pay-total .amount { font-family: var(--font-serif); font-size: 1.5rem; }
+  .pay-btn { width: 100%; background: var(--accent-dk); color: #fff; border: none; padding: 1rem; border-radius: var(--radius); font-family: var(--font-sans); font-size: 14px; letter-spacing: .04em; cursor: pointer; transition: var(--transition); margin-top: 0.5rem; }
+  .pay-btn:hover { background: var(--ink); }
+  .secure-note { text-align: center; font-size: 11px; color: var(--ink-3); margin-top: 0.75rem; }
+  .upi-panel, .wallet-panel { text-align: center; padding: 2rem 0; }
+  .upi-panel input { max-width: 280px; margin: 0 auto 1rem; display: block; }
+  .wallet-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1.5rem; }
+  .wallet-option { border: 1px solid var(--border); border-radius: var(--radius); padding: 0.8rem; cursor: pointer; text-align: center; font-size: 13px; transition: var(--transition); }
+  .wallet-option:hover { border-color: var(--accent); background: var(--bg); }
+  .w-icon { font-size: 1.5rem; margin-bottom: 0.3rem; }
+  .success-panel { text-align: center; padding: 2.5rem 1rem; }
+  .success-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+  .success-panel h3 { font-family: var(--font-serif); font-size: 1.6rem; margin-bottom: 0.5rem; }
+  .success-panel p { color: var(--ink-2); font-size: 14px; }
+
+  /* ── Toast ── */
+  #toast {
+    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--ink); color: #fff; padding: 0.75rem 1.5rem; border-radius: 40px;
+    font-size: 13px; opacity: 0; transition: all 0.3s; z-index: 400; white-space: nowrap;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── Newsletter ── */
+  #newsletter { background: var(--accent); text-align: center; padding: 5rem 0; }
+  #newsletter h2 { color: #fff; margin-bottom: 0.8rem; }
+  #newsletter p { color: rgba(255,255,255,0.75); margin-bottom: 2rem; }
+  .newsletter-form { display: flex; max-width: 420px; margin: 0 auto; gap: 0; overflow: hidden; border-radius: var(--radius); box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+  .newsletter-form input { flex: 1; border: none; padding: 1rem 1.2rem; font-family: var(--font-sans); font-size: 14px; outline: none; }
+  .newsletter-form button { background: var(--ink); color: #fff; border: none; padding: 1rem 1.4rem; cursor: pointer; font-family: var(--font-sans); font-size: 13px; transition: var(--transition); }
+  .newsletter-form button:hover { background: #2c2a26; }
+
+  /* ── Footer ── */
+  footer { background: var(--ink); color: rgba(255,255,255,0.5); padding: 4rem 0 2rem; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+  .footer-logo { font-family: var(--font-serif); font-size: 1.8rem; font-weight: 400; color: #fff; margin-bottom: 1rem; letter-spacing: .1em; }
+  .footer-logo em { color: var(--accent); font-style: italic; }
+  footer p { font-size: 13px; line-height: 1.8; }
+  footer h4 { color: #fff; font-family: var(--font-sans); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; font-weight: 500; margin-bottom: 1.2rem; }
+  footer ul { list-style: none; }
+  footer ul li { margin-bottom: 0.6rem; }
+  footer ul li a { color: rgba(255,255,255,0.45); text-decoration: none; font-size: 13px; transition: var(--transition); }
+  footer ul li a:hover { color: var(--accent); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; display: flex; justify-content: space-between; font-size: 12px; flex-wrap: wrap; gap: 1rem; }
+  .pay-methods { display: flex; gap: 8px; }
+  .pay-method { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 4px 10px; font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: .04em; }
+
+  /* ── Animations ── */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-up { animation: fadeUp 0.6s ease both; }
+  .fd-1 { animation-delay: 0.1s; }
+  .fd-2 { animation-delay: 0.2s; }
+  .fd-3 { animation-delay: 0.3s; }
+  .fd-4 { animation-delay: 0.4s; }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    #hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-image { min-height: 300px; order: -1; }
+    .hero-text { padding: 2.5rem 1.5rem; margin: 0; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    nav { display: none; }
+    section { padding: 4rem 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div id="topbar">
+  <span data-i18n="free_shipping">✦ Free shipping on orders over $75</span>
+  <div class="lang-btns">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+    <button class="lang-btn" onclick="setLang('de')">DE</button>
+    <button class="lang-btn" onclick="setLang('es')">ES</button>
+    <button class="lang-btn" onclick="setLang('ja')">JA</button>
+  </div>
+</div>
+
+<!-- Header -->
+<header>
+  <a href="#" class="logo">LU<em>ME</em>NA</a>
+  <nav>
+    <a href="#catalog" data-i18n="nav_shop">Shop</a>
+    <a href="#" data-i18n="nav_collections">Collections</a>
+    <a href="#" data-i18n="nav_about">About</a>
+    <a href="#" data-i18n="nav_contact">Contact</a>
+  </nav>
+  <div class="header-actions">
+    <button class="search-btn" onclick="showToast('🔍 Search coming soon')">
+      🔍 <span data-i18n="search">Search</span>
+    </button>
+    <button class="cart-btn" onclick="toggleCart()">
+      🛍 <span data-i18n="cart">Cart</span>
+      <span class="cart-count" id="cart-count">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- Hero -->
+<section id="hero">
+  <div class="hero-text">
+    <div class="hero-tag fade-up fd-1" data-i18n="hero_tag">New Collection 2025</div>
+    <h1 class="fade-up fd-2">
+      <span data-i18n="hero_h1a">Crafted for</span><br>
+      <em data-i18n="hero_h1b">the Discerning</em>
+    </h1>
+    <p class="fade-up fd-3" data-i18n="hero_p">Thoughtfully designed objects for everyday luxury. Each piece made with intention, built to last a lifetime.</p>
+    <div class="hero-btns fade-up fd-4">
+      <a href="#catalog" class="btn-primary" data-i18n="hero_cta">Explore Collection →</a>
+      <a href="#" class="btn-outline" data-i18n="hero_cta2">Our Story</a>
+    </div>
+    <div class="hero-stats fade-up">
+      <div class="hero-stat"><div class="num">12k+</div><div class="lbl" data-i18n="stat_customers">Happy Customers</div></div>
+      <div class="hero-stat"><div class="num">98%</div><div class="lbl" data-i18n="stat_satisfaction">Satisfaction Rate</div></div>
+      <div class="hero-stat"><div class="num">40+</div><div class="lbl" data-i18n="stat_countries">Countries Served</div></div>
+    </div>
+  </div>
+  <div class="hero-image">
+    <div class="hero-badge"><strong>NEW</strong>2025</div>
+    <div class="product-float">
+      <div class="p-icon">🕯️</div>
+      <div class="p-name" data-i18n="feat_prod">Amber Reserve</div>
+      <div class="p-price">$148</div>
+    </div>
+  </div>
+</section>
+
+<!-- Categories -->
+<div id="categories">
+  <div class="container">
+    <div class="cat-pills">
+      <button class="cat-pill active" onclick="filterCat('all')" data-i18n="cat_all">All Products</button>
+      <button class="cat-pill" onclick="filterCat('home')">🏡 Home & Living</button>
+      <button class="cat-pill" onclick="filterCat('beauty')">✨ Beauty</button>
+      <button class="cat-pill" onclick="filterCat('wellness')">🌿 Wellness</button>
+      <button class="cat-pill" onclick="filterCat('fragrance')">🌸 Fragrance</button>
+      <button class="cat-pill" onclick="filterCat('gift')">🎁 Gift Sets</button>
+    </div>
+  </div>
+</div>
+
+<!-- Catalog -->
+<section id="catalog">
+  <div class="container">
+    <div class="catalog-header">
+      <div class="catalog-title" data-i18n="catalog_title">Our Products</div>
+      <div class="filter-row">
+        <select class="filter-select" onchange="sortProducts(this.value)">
+          <option value="default" data-i18n="sort_default">Sort: Featured</option>
+          <option value="price-asc" data-i18n="sort_price_asc">Price: Low → High</option>
+          <option value="price-desc" data-i18n="sort_price_desc">Price: High → Low</option>
+          <option value="rating" data-i18n="sort_rating">Top Rated</option>
+        </select>
+      </div>
+    </div>
+    <div class="product-grid" id="product-grid">
+      <!-- JS populated -->
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section id="features">
+  <div class="container">
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feat-icon">🌍</div>
+        <h3 data-i18n="feat1_title">Ethically Sourced</h3>
+        <p data-i18n="feat1_p">Every material traced to its origin. We work directly with artisans in 18 countries.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">🔒</div>
+        <h3 data-i18n="feat2_title">Secure Payments</h3>
+        <p data-i18n="feat2_p">256-bit SSL encryption on every transaction. Card, UPI, and digital wallets accepted.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">↩️</div>
+        <h3 data-i18n="feat3_title">30-Day Returns</h3>
+        <p data-i18n="feat3_p">Not in love with it? Free returns, no questions asked. We'll make it right.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">📦</div>
+        <h3 data-i18n="feat4_title">Premium Packaging</h3>
+        <p data-i18n="feat4_p">Zero-waste, luxury packaging. Every order arrives like a gift — to yourself or someone else.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section id="testimonials">
+  <div class="container">
+    <div class="section-label" data-i18n="test_label">What Our Customers Say</div>
+    <h2 class="section-title" data-i18n="test_title">Loved Worldwide</h2>
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <div class="test-stars">★★★★★</div>
+        <div class="test-text" data-i18n="test1">"The quality is unparalleled. I've purchased from luxury brands all over the world — LUMENA stands apart."</div>
+        <div class="test-author">
+          <div class="test-avatar">SR</div>
+          <div><div class="test-name">Sophia R.</div><div class="test-loc">London, UK</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="test-stars">★★★★★</div>
+        <div class="test-text" data-i18n="test2">"Fast shipping, stunning packaging, and products that truly live up to every description. A cut above."</div>
+        <div class="test-author">
+          <div class="test-avatar">AK</div>
+          <div><div class="test-name">Arjun K.</div><div class="test-loc">Mumbai, India</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="test-stars">★★★★★</div>
+        <div class="test-text" data-i18n="test3">"I gifted the candle set to my mother. She called it the best gift she's ever received. Will order again."</div>
+        <div class="test-author">
+          <div class="test-avatar">ML</div>
+          <div><div class="test-name">Marie L.</div><div class="test-loc">Paris, France</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<section id="newsletter">
+  <div class="container">
+    <h2 data-i18n="news_title">Join the Inner Circle</h2>
+    <p data-i18n="news_p">Exclusive drops, early access, and stories from behind the craft.</p>
+    <div class="newsletter-form">
+      <input type="email" placeholder="Your email address" data-i18n-ph="news_ph">
+      <button onclick="showToast('✓ You\'re on the list!')" data-i18n="news_btn">Subscribe</button>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">LU<em>ME</em>NA</div>
+        <p data-i18n="footer_about">Thoughtfully curated objects for modern life. Made with care, shipped worldwide.</p>
+      </div>
+      <div>
+        <h4 data-i18n="footer_shop">Shop</h4>
+        <ul>
+          <li><a href="#">New Arrivals</a></li>
+          <li><a href="#">Best Sellers</a></li>
+          <li><a href="#">Gift Sets</a></li>
+          <li><a href="#">Sale</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="footer_help">Help</h4>
+        <ul>
+          <li><a href="#">Shipping</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">Track Order</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="footer_company">Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Sustainability</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span data-i18n="footer_copy">© 2025 LUMENA. All rights reserved.</span>
+      <div class="pay-methods">
+        <div class="pay-method">VISA</div>
+        <div class="pay-method">MC</div>
+        <div class="pay-method">AMEX</div>
+        <div class="pay-method">UPI</div>
+        <div class="pay-method">GPay</div>
+        <div class="pay-method">PayPal</div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Cart Sidebar -->
+<div id="cart-overlay" onclick="toggleCart()"></div>
+<div id="cart-panel">
+  <div class="cart-header">
+    <h2 data-i18n="cart_title">Your Cart</h2>
+    <button class="close-btn" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items-list">
+    <div class="cart-empty">
+      <div class="e-icon">🛍</div>
+      <p data-i18n="cart_empty">Your cart is empty.<br>Add something beautiful.</p>
+    </div>
+  </div>
+  <div class="cart-footer" id="cart-footer" style="display:none">
+    <div class="cart-summary">
+      <div class="cart-row"><span data-i18n="subtotal">Subtotal</span><span id="cart-subtotal">$0</span></div>
+      <div class="cart-row"><span data-i18n="shipping">Shipping</span><span data-i18n="cart_free">Free</span></div>
+      <div class="cart-row total"><span data-i18n="total">Total</span><span id="cart-total">$0</span></div>
+    </div>
+    <button class="checkout-btn" onclick="openPayModal()" data-i18n="checkout">Proceed to Checkout →</button>
+  </div>
+</div>
+
+<!-- Payment Modal -->
+<div id="pay-overlay">
+  <div id="pay-modal">
+    <div class="pay-header">
+      <h2 data-i18n="pay_title">Secure Checkout</h2>
+      <button class="close-btn" onclick="closePayModal()">✕</button>
+    </div>
+    <div class="pay-body" id="pay-body">
+      <div class="pay-tabs">
+        <button class="pay-tab active" onclick="switchPayTab('card')" data-i18n="pay_card">💳 Card</button>
+        <button class="pay-tab" onclick="switchPayTab('upi')" data-i18n="pay_upi">📲 UPI</button>
+        <button class="pay-tab" onclick="switchPayTab('wallet')" data-i18n="pay_wallet">👛 Wallet</button>
+      </div>
+
+      <div id="pay-card">
+        <div class="card-icons">
+          <div class="card-icon">VISA</div>
+          <div class="card-icon">MC</div>
+          <div class="card-icon">AMEX</div>
+          <div class="card-icon">RuPay</div>
+        </div>
+        <div class="field-group">
+          <label data-i18n="card_name">Name on Card</label>
+          <input type="text" placeholder="Alexandra Smith">
+        </div>
+        <div class="field-group">
+          <label data-i18n="card_number">Card Number</label>
+          <input type="text" placeholder="4242  4242  4242  4242" maxlength="19" oninput="formatCard(this)">
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label data-i18n="card_expiry">Expiry</label>
+            <input type="text" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)">
+          </div>
+          <div class="field-group">
+            <label data-i18n="card_cvv">CVV</label>
+            <input type="text" placeholder="•••" maxlength="4">
+          </div>
+        </div>
+      </div>
+
+      <div id="pay-upi" style="display:none">
+        <div class="upi-panel">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">📲</div>
+          <p style="color: var(--ink-2); margin-bottom: 1.2rem; font-size: 14px;" data-i18n="upi_hint">Enter your UPI ID to proceed</p>
+          <div class="field-group">
+            <label data-i18n="upi_id">UPI ID</label>
+            <input type="text" placeholder="yourname@upi">
+          </div>
+        </div>
+      </div>
+
+      <div id="pay-wallet" style="display:none">
+        <div class="wallet-panel">
+          <div class="wallet-grid">
+            <div class="wallet-option" onclick="showToast('Opening GPay...')"><div class="w-icon">🟢</div>Google Pay</div>
+            <div class="wallet-option" onclick="showToast('Opening PhonePe...')"><div class="w-icon">🟣</div>PhonePe</div>
+            <div class="wallet-option" onclick="showToast('Opening PayPal...')"><div class="w-icon">🔵</div>PayPal</div>
+            <div class="wallet-option" onclick="showToast('Opening Paytm...')"><div class="w-icon">🔷</div>Paytm</div>
+            <div class="wallet-option" onclick="showToast('Opening Amazon Pay...')"><div class="w-icon">🟡</div>Amazon Pay</div>
+            <div class="wallet-option" onclick="showToast('Opening BHIM...')"><div class="w-icon">🇮🇳</div>BHIM</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pay-total">
+        <span class="label" data-i18n="order_total">Order Total</span>
+        <span class="amount" id="pay-amount">$0</span>
+      </div>
+      <button class="pay-btn" onclick="processPayment()" data-i18n="pay_now">Pay Now — Secure & Encrypted 🔒</button>
+      <div class="secure-note" data-i18n="secure_note">🔒 256-bit SSL Encryption · PCI DSS Compliant</div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════
+//  TRANSLATIONS  O(1) lookup per key
+// ═══════════════════════════════════════════════
+const i18n = {
+  en: {
+    free_shipping:'✦ Free shipping on orders over $75',
+    nav_shop:'Shop', nav_collections:'Collections', nav_about:'About', nav_contact:'Contact',
+    search:'Search', cart:'Cart',
+    hero_tag:'New Collection 2025', hero_h1a:'Crafted for', hero_h1b:'the Discerning',
+    hero_p:'Thoughtfully designed objects for everyday luxury. Each piece made with intention, built to last a lifetime.',
+    hero_cta:'Explore Collection →', hero_cta2:'Our Story',
+    feat_prod:'Amber Reserve',
+    stat_customers:'Happy Customers', stat_satisfaction:'Satisfaction Rate', stat_countries:'Countries Served',
+    cat_all:'All Products',
+    catalog_title:'Our Products',
+    sort_default:'Sort: Featured', sort_price_asc:'Price: Low → High', sort_price_desc:'Price: High → Low', sort_rating:'Top Rated',
+    feat1_title:'Ethically Sourced', feat1_p:'Every material traced to its origin. We work directly with artisans in 18 countries.',
+    feat2_title:'Secure Payments', feat2_p:'256-bit SSL encryption on every transaction. Card, UPI, and digital wallets accepted.',
+    feat3_title:'30-Day Returns', feat3_p:'Not in love with it? Free returns, no questions asked. We\'ll make it right.',
+    feat4_title:'Premium Packaging', feat4_p:'Zero-waste, luxury packaging. Every order arrives like a gift.',
+    test_label:'What Our Customers Say', test_title:'Loved Worldwide',
+    test1:'"The quality is unparalleled. I\'ve purchased from luxury brands all over the world — LUMENA stands apart."',
+    test2:'"Fast shipping, stunning packaging, and products that truly live up to every description. A cut above."',
+    test3:'"I gifted the candle set to my mother. She called it the best gift she\'s ever received. Will order again."',
+    news_title:'Join the Inner Circle', news_p:'Exclusive drops, early access, and stories from behind the craft.',
+    news_ph:'Your email address', news_btn:'Subscribe',
+    footer_about:'Thoughtfully curated objects for modern life. Made with care, shipped worldwide.',
+    footer_shop:'Shop', footer_help:'Help', footer_company:'Company',
+    footer_copy:'© 2025 LUMENA. All rights reserved.',
+    cart_title:'Your Cart', cart_empty:'Your cart is empty.\nAdd something beautiful.',
+    subtotal:'Subtotal', shipping:'Shipping', cart_free:'Free', total:'Total', checkout:'Proceed to Checkout →',
+    pay_title:'Secure Checkout', pay_card:'💳 Card', pay_upi:'📲 UPI', pay_wallet:'👛 Wallet',
+    card_name:'Name on Card', card_number:'Card Number', card_expiry:'Expiry', card_cvv:'CVV',
+    upi_hint:'Enter your UPI ID to proceed', upi_id:'UPI ID',
+    order_total:'Order Total', pay_now:'Pay Now — Secure & Encrypted 🔒',
+    secure_note:'🔒 256-bit SSL Encryption · PCI DSS Compliant',
+    add_to_cart:'Add to Cart', added:'Added!', remove:'Remove',
+  },
+  fr: {
+    free_shipping:'✦ Livraison gratuite dès 75 €',
+    nav_shop:'Boutique', nav_collections:'Collections', nav_about:'À Propos', nav_contact:'Contact',
+    search:'Rechercher', cart:'Panier',
+    hero_tag:'Nouvelle Collection 2025', hero_h1a:'Conçu pour', hero_h1b:"l'Exigeant",
+    hero_p:"Des objets pensés pour le luxe quotidien. Chaque pièce faite avec intention, destinée à durer toute une vie.",
+    hero_cta:'Explorer →', hero_cta2:'Notre Histoire',
+    feat_prod:'Réserve Ambrée',
+    stat_customers:'Clients Satisfaits', stat_satisfaction:'Taux de Satisfaction', stat_countries:'Pays Servis',
+    cat_all:'Tous les Produits',
+    catalog_title:'Nos Produits',
+    sort_default:'Trier: Vedette', sort_price_asc:'Prix ↑', sort_price_desc:'Prix ↓', sort_rating:'Mieux Notés',
+    feat1_title:'Approvisionnement Éthique', feat1_p:"Chaque matériau tracé jusqu'à son origine.",
+    feat2_title:'Paiements Sécurisés', feat2_p:'Chiffrement SSL 256 bits sur chaque transaction.',
+    feat3_title:'Retours 30 Jours', feat3_p:'Pas satisfait? Retours gratuits, sans questions.',
+    feat4_title:'Emballage Premium', feat4_p:'Emballage de luxe zéro déchet.',
+    test_label:'Ce Que Nos Clients Disent', test_title:'Aimé Partout Dans Le Monde',
+    test1:'"La qualité est incomparable."', test2:'"Livraison rapide, emballage époustouflant."', test3:'"Le meilleur cadeau que ma mère ait jamais reçu."',
+    news_title:"Rejoignez le Cercle", news_p:'Accès exclusif et histoires des artisans.',
+    news_ph:'Votre adresse email', news_btn:"S'abonner",
+    footer_about:"Objets soigneusement sélectionnés pour la vie moderne.",
+    footer_shop:'Boutique', footer_help:'Aide', footer_company:'Entreprise',
+    footer_copy:'© 2025 LUMENA. Tous droits réservés.',
+    cart_title:'Votre Panier', cart_empty:'Votre panier est vide.',
+    subtotal:'Sous-total', shipping:'Livraison', cart_free:'Gratuit', total:'Total', checkout:'Commander →',
+    pay_title:'Paiement Sécurisé', pay_card:'💳 Carte', pay_upi:'📲 UPI', pay_wallet:'👛 Portefeuille',
+    card_name:'Nom sur la Carte', card_number:'Numéro de Carte', card_expiry:'Expiration', card_cvv:'CVV',
+    upi_hint:'Entrez votre ID UPI', upi_id:'ID UPI',
+    order_total:'Total Commande', pay_now:'Payer Maintenant 🔒',
+    secure_note:'🔒 Chiffrement SSL 256 bits · Conforme PCI DSS',
+    add_to_cart:'Ajouter', added:'Ajouté!', remove:'Supprimer',
+  },
+  de: {
+    free_shipping:'✦ Kostenloser Versand ab 75 €',
+    nav_shop:'Shop', nav_collections:'Kollektionen', nav_about:'Über uns', nav_contact:'Kontakt',
+    search:'Suchen', cart:'Warenkorb',
+    hero_tag:'Neue Kollektion 2025', hero_h1a:'Für', hero_h1b:'den Anspruchsvollen',
+    hero_p:'Durchdacht gestaltete Objekte für alltäglichen Luxus.',
+    hero_cta:'Kollektion entdecken →', hero_cta2:'Unsere Geschichte',
+    feat_prod:'Bernstein Reserve',
+    stat_customers:'Glückliche Kunden', stat_satisfaction:'Zufriedenheitsrate', stat_countries:'Länder',
+    cat_all:'Alle Produkte',
+    catalog_title:'Unsere Produkte',
+    sort_default:'Sortieren', sort_price_asc:'Preis ↑', sort_price_desc:'Preis ↓', sort_rating:'Bestbewertet',
+    feat1_title:'Ethisch Bezogen', feat1_p:'Jedes Material bis zum Ursprung rückverfolgbar.',
+    feat2_title:'Sichere Zahlung', feat2_p:'256-Bit-SSL-Verschlüsselung.',
+    feat3_title:'30-Tage-Rückgabe', feat3_p:'Kostenlose Rücksendung, keine Fragen.',
+    feat4_title:'Premium-Verpackung', feat4_p:'Zero-Waste Luxusverpackung.',
+    test_label:'Was Unsere Kunden Sagen', test_title:'Weltweit Geliebt',
+    test1:'"Die Qualität ist unübertroffen."', test2:'"Schnelle Lieferung, atemberaubende Verpackung."', test3:'"Das beste Geschenk, das meine Mutter je erhalten hat."',
+    news_title:'Dem Inneren Kreis Beitreten', news_p:'Exklusive Drops und Geschichten.',
+    news_ph:'Ihre E-Mail-Adresse', news_btn:'Abonnieren',
+    footer_about:'Sorgfältig ausgewählte Objekte für das moderne Leben.',
+    footer_shop:'Shop', footer_help:'Hilfe', footer_company:'Unternehmen',
+    footer_copy:'© 2025 LUMENA. Alle Rechte vorbehalten.',
+    cart_title:'Ihr Warenkorb', cart_empty:'Ihr Warenkorb ist leer.',
+    subtotal:'Zwischensumme', shipping:'Versand', cart_free:'Kostenlos', total:'Gesamt', checkout:'Zur Kasse →',
+    pay_title:'Sicherer Checkout', pay_card:'💳 Karte', pay_upi:'📲 UPI', pay_wallet:'👛 Wallet',
+    card_name:'Name auf Karte', card_number:'Kartennummer', card_expiry:'Ablaufdatum', card_cvv:'CVV',
+    upi_hint:'Geben Sie Ihre UPI-ID ein', upi_id:'UPI-ID',
+    order_total:'Gesamtbestellung', pay_now:'Jetzt Bezahlen 🔒',
+    secure_note:'🔒 256-Bit-SSL · PCI DSS Konform',
+    add_to_cart:'Hinzufügen', added:'Hinzugefügt!', remove:'Entfernen',
+  },
+  es: {
+    free_shipping:'✦ Envío gratis en pedidos superiores a $75',
+    nav_shop:'Tienda', nav_collections:'Colecciones', nav_about:'Nosotros', nav_contact:'Contacto',
+    search:'Buscar', cart:'Carrito',
+    hero_tag:'Nueva Colección 2025', hero_h1a:'Creado para', hero_h1b:'el Exigente',
+    hero_p:'Objetos diseñados con cuidado para el lujo cotidiano.',
+    hero_cta:'Explorar Colección →', hero_cta2:'Nuestra Historia',
+    feat_prod:'Reserva Ámbar',
+    stat_customers:'Clientes Felices', stat_satisfaction:'Satisfacción', stat_countries:'Países',
+    cat_all:'Todos los Productos',
+    catalog_title:'Nuestros Productos',
+    sort_default:'Ordenar', sort_price_asc:'Precio ↑', sort_price_desc:'Precio ↓', sort_rating:'Mejor Valorados',
+    feat1_title:'Abastecimiento Ético', feat1_p:'Cada material trazado hasta su origen.',
+    feat2_title:'Pagos Seguros', feat2_p:'Cifrado SSL de 256 bits en cada transacción.',
+    feat3_title:'Devoluciones 30 Días', feat3_p:'Devoluciones gratuitas sin preguntas.',
+    feat4_title:'Empaque Premium', feat4_p:'Empaque de lujo sin residuos.',
+    test_label:'Lo Que Dicen Nuestros Clientes', test_title:'Amado en Todo el Mundo',
+    test1:'"La calidad no tiene comparación."', test2:'"Envío rápido, empaque impresionante."', test3:'"El mejor regalo que mi madre ha recibido."',
+    news_title:'Únete al Círculo Íntimo', news_p:'Acceso exclusivo e historias de los artesanos.',
+    news_ph:'Tu dirección de correo', news_btn:'Suscribirse',
+    footer_about:'Objetos cuidadosamente seleccionados para la vida moderna.',
+    footer_shop:'Tienda', footer_help:'Ayuda', footer_company:'Empresa',
+    footer_copy:'© 2025 LUMENA. Todos los derechos reservados.',
+    cart_title:'Tu Carrito', cart_empty:'Tu carrito está vacío.',
+    subtotal:'Subtotal', shipping:'Envío', cart_free:'Gratis', total:'Total', checkout:'Proceder al Pago →',
+    pay_title:'Pago Seguro', pay_card:'💳 Tarjeta', pay_upi:'📲 UPI', pay_wallet:'👛 Billetera',
+    card_name:'Nombre en Tarjeta', card_number:'Número de Tarjeta', card_expiry:'Vencimiento', card_cvv:'CVV',
+    upi_hint:'Ingresa tu ID UPI', upi_id:'ID UPI',
+    order_total:'Total del Pedido', pay_now:'Pagar Ahora 🔒',
+    secure_note:'🔒 Cifrado SSL 256 bits · Cumple PCI DSS',
+    add_to_cart:'Añadir', added:'¡Añadido!', remove:'Eliminar',
+  },
+  ja: {
+    free_shipping:'✦ $75以上のご注文で送料無料',
+    nav_shop:'ショップ', nav_collections:'コレクション', nav_about:'概要', nav_contact:'お問い合わせ',
+    search:'検索', cart:'カート',
+    hero_tag:'2025年 新コレクション', hero_h1a:'こだわる人のための', hero_h1b:'上質なひととき',
+    hero_p:'日常の贅沢のために丁寧にデザインされたアイテム。',
+    hero_cta:'コレクションを見る →', hero_cta2:'私たちの物語',
+    feat_prod:'アンバー リザーブ',
+    stat_customers:'満足なお客様', stat_satisfaction:'満足度', stat_countries:'対応国数',
+    cat_all:'全商品',
+    catalog_title:'商品一覧',
+    sort_default:'並び替え', sort_price_asc:'価格 ↑', sort_price_desc:'価格 ↓', sort_rating:'高評価順',
+    feat1_title:'倫理的調達', feat1_p:'すべての素材の産地を追跡しています。',
+    feat2_title:'安全なお支払い', feat2_p:'256ビットSSL暗号化。カード・UPI・電子マネー対応。',
+    feat3_title:'30日間返品保証', feat3_p:'ご満足いただけない場合は無料で返品できます。',
+    feat4_title:'プレミアム梱包', feat4_p:'環境に配慮した高級梱包。',
+    test_label:'お客様の声', test_title:'世界中で愛されています',
+    test1:'「品質は他に類を見ません。」', test2:'「迅速な配送と素晴らしい梱包。」', test3:'「母への最高のプレゼントでした。」',
+    news_title:'インナーサークルに参加', news_p:'限定情報とストーリーをお届けします。',
+    news_ph:'メールアドレス', news_btn:'登録する',
+    footer_about:'現代の生活のために丁寧にセレクトされたアイテム。',
+    footer_shop:'ショップ', footer_help:'ヘルプ', footer_company:'会社情報',
+    footer_copy:'© 2025 LUMENA. 無断転載禁止。',
+    cart_title:'カート', cart_empty:'カートは空です。',
+    subtotal:'小計', shipping:'配送', cart_free:'無料', total:'合計', checkout:'レジへ進む →',
+    pay_title:'安全なチェックアウト', pay_card:'💳 カード', pay_upi:'📲 UPI', pay_wallet:'👛 ウォレット',
+    card_name:'カード名義', card_number:'カード番号', card_expiry:'有効期限', card_cvv:'CVV',
+    upi_hint:'UPI IDを入力してください', upi_id:'UPI ID',
+    order_total:'注文合計', pay_now:'今すぐ支払う 🔒',
+    secure_note:'🔒 256ビットSSL · PCI DSS準拠',
+    add_to_cart:'カートに追加', added:'追加完了!', remove:'削除',
+  }
+};
+
+// ═══════════════════════════════════════════════
+//  PRODUCTS — static data array O(n) render
+// ═══════════════════════════════════════════════
+const PRODUCTS = [
+  { id:1, emoji:'🕯️', name:'Amber Reserve Candle', cat:'home',      price:148, rating:4.9, reviews:284, badge:'new',  bg:'#F5EFE4', sale:null },
+  { id:2, emoji:'🌹', name:'Rose Elixir Serum',    cat:'beauty',    price:89,  rating:4.8, reviews:192, badge:'hot',  bg:'#F7E8EE', sale:null },
+  { id:3, emoji:'🧘', name:'Zen Ritual Gift Box',  cat:'wellness',  price:220, rating:5.0, reviews:98,  badge:'new',  bg:'#EFF5F0', sale:null },
+  { id:4, emoji:'🌸', name:'Cherry Blossom Mist',  cat:'fragrance', price:120, rating:4.7, reviews:156, badge:null,   bg:'#F5ECF5', sale:99  },
+  { id:5, emoji:'🍃', name:'Forest Bathing Oil',   cat:'wellness',  price:78,  rating:4.6, reviews:201, badge:null,   bg:'#EAF2EC', sale:null },
+  { id:6, emoji:'🪨', name:'Obsidian Face Stone',  cat:'beauty',    price:64,  rating:4.5, reviews:134, badge:'sale', bg:'#EEEEF0', sale:49  },
+  { id:7, emoji:'🎁', name:'Holiday Luxe Set',     cat:'gift',      price:295, rating:4.9, reviews:67,  badge:'hot',  bg:'#F2EDE8', sale:null },
+  { id:8, emoji:'🕌', name:'Midnight Oud Candle',  cat:'fragrance', price:165, rating:4.8, reviews:310, badge:null,   bg:'#1A1814', sale:null },
+  { id:9, emoji:'💆', name:'Scalp Ritual Blend',   cat:'beauty',    price:55,  rating:4.4, reviews:88,  badge:null,   bg:'#F0F5EE', sale:44  },
+  { id:10,emoji:'🏺', name:'Ceramic Reed Diffuser',cat:'home',      price:98,  rating:4.7, reviews:178, badge:'new',  bg:'#EDF0F5', sale:null },
+  { id:11,emoji:'🌿', name:'Herbal Sleep Kit',     cat:'wellness',  price:68,  rating:4.6, reviews:145, badge:null,   bg:'#EAF3E8', sale:null },
+  { id:12,emoji:'✨', name:'Gold Glow Mask',        cat:'beauty',    price:42,  rating:4.3, reviews:220, badge:'sale', bg:'#F5F0E0', sale:32  },
+];
+
+// ═══════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════
+let currentLang   = 'en';
+let currentCat    = 'all';
+let currentSort   = 'default';
+let cart          = [];  // [{id, name, emoji, price, qty}]
+
+// ═══════════════════════════════════════════════
+//  RENDER PRODUCTS  O(n)
+// ═══════════════════════════════════════════════
+function getFilteredSorted() {
+  let list = currentCat === 'all' ? [...PRODUCTS] : PRODUCTS.filter(p => p.cat === currentCat);
+  if (currentSort === 'price-asc')  list.sort((a,b) => (a.sale||a.price) - (b.sale||b.price));
+  if (currentSort === 'price-desc') list.sort((a,b) => (b.sale||b.price) - (a.sale||a.price));
+  if (currentSort === 'rating')     list.sort((a,b) => b.rating - a.rating);
+  return list;
+}
+
+function renderProducts() {
+  const grid = document.getElementById('product-grid');
+  const list = getFilteredSorted();
+  const t = i18n[currentLang];
+  grid.innerHTML = list.map(p => {
+    const inCart = cart.find(c => c.id === p.id);
+    const displayPrice = p.sale ? p.sale : p.price;
+    return `
+    <div class="product-card" data-cat="${p.cat}">
+      <div class="prod-img" style="background:${p.bg}">
+        ${p.badge ? `<span class="prod-badge badge-${p.badge}">${p.badge.toUpperCase()}</span>` : ''}
+        <button class="prod-fav" onclick="toggleFav(${p.id}, this)" title="Wishlist">🤍</button>
+        ${p.emoji}
+      </div>
+      <div class="prod-body">
+        <div class="prod-cat">${p.cat}</div>
+        <div class="prod-name">${p.name}</div>
+        <div class="prod-rating">
+          <span>${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5 - Math.floor(p.rating))}</span>
+          ${p.rating} (${p.reviews})
+        </div>
+        <div class="prod-footer">
+          <div class="prod-price">
+            ${p.sale ? `<span class="old">$${p.price}</span>` : ''}
+            $${displayPrice}
+          </div>
+          <button class="add-btn ${inCart ? 'added' : ''}"
+            id="add-btn-${p.id}"
+            onclick="addToCart(${p.id})">
+            ${inCart ? t.added : t.add_to_cart}
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterCat(cat) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  renderProducts();
+}
+
+function sortProducts(val) {
+  currentSort = val;
+  renderProducts();
+}
+
+function toggleFav(id, btn) {
+  btn.textContent = btn.textContent === '🤍' ? '❤️' : '🤍';
+  showToast(btn.textContent === '❤️' ? '❤️ Added to wishlist' : 'Removed from wishlist');
+}
+
+// ═══════════════════════════════════════════════
+//  CART  O(1) lookup with Map-style find
+// ═══════════════════════════════════════════════
+function addToCart(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  const existing = cart.find(c => c.id === id);
+  if (existing) {
+    existing.qty++;
+  } else {
+    cart.push({ id: p.id, name: p.name, emoji: p.emoji, price: p.sale || p.price, qty: 1 });
+  }
+  updateCartUI();
+  const btn = document.getElementById(`add-btn-${id}`);
+  if (btn) { btn.textContent = i18n[currentLang].added; btn.classList.add('added'); }
+  showToast('🛍 Added to cart!');
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(c => c.id !== id);
+  updateCartUI();
+  renderProducts();
+}
+
+function changeQty(id, delta) {
+  const item = cart.find(c => c.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) { removeFromCart(id); return; }
+  updateCartUI();
+}
+
+function getTotal() {
+  return cart.reduce((s, c) => s + c.price * c.qty, 0);
+}
+
+function updateCartUI() {
+  const count = cart.reduce((s, c) => s + c.qty, 0);
+  document.getElementById('cart-count').textContent = count;
+  const list = document.getElementById('cart-items-list');
+  const footer = document.getElementById('cart-footer');
+  if (cart.length === 0) {
+    list.innerHTML = `<div class="cart-empty"><div class="e-icon">🛍</div><p>${i18n[currentLang].cart_empty}</p></div>`;
+    footer.style.display = 'none';
+    return;
+  }
+  const t = i18n[currentLang];
+  list.innerHTML = cart.map(c => `
+    <div class="cart-item">
+      <div class="cart-item-img">${c.emoji}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${c.name}</div>
+        <div class="cart-item-price">$${c.price}</div>
+        <div class="cart-item-qty">
+          <button class="qty-btn" onclick="changeQty(${c.id},-1)">−</button>
+          <span class="qty-num">${c.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${c.id},1)">+</button>
+          <button class="rm-btn" onclick="removeFromCart(${c.id})">🗑</button>
+        </div>
+      </div>
+    </div>`).join('');
+  const total = getTotal();
+  document.getElementById('cart-subtotal').textContent = `$${total}`;
+  document.getElementById('cart-total').textContent = `$${total}`;
+  document.getElementById('pay-amount').textContent = `$${total}`;
+  footer.style.display = 'block';
+}
+
+function toggleCart() {
+  document.getElementById('cart-overlay').classList.toggle('open');
+  document.getElementById('cart-panel').classList.toggle('open');
+}
+
+// ═══════════════════════════════════════════════
+//  PAYMENT MODAL
+// ═══════════════════════════════════════════════
+function openPayModal() {
+  toggleCart();
+  document.getElementById('pay-overlay').classList.add('open');
+  document.getElementById('pay-amount').textContent = `$${getTotal()}`;
+}
+
+function closePayModal() {
+  document.getElementById('pay-overlay').classList.remove('open');
+}
+
+function switchPayTab(tab) {
+  document.querySelectorAll('.pay-tab').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('pay-card').style.display   = tab === 'card'   ? '' : 'none';
+  document.getElementById('pay-upi').style.display    = tab === 'upi'    ? '' : 'none';
+  document.getElementById('pay-wallet').style.display = tab === 'wallet' ? '' : 'none';
+}
+
+function processPayment() {
+  const btn = document.querySelector('.pay-btn');
+  btn.textContent = 'Processing...';
+  btn.disabled = true;
+  setTimeout(() => {
+    document.getElementById('pay-body').innerHTML = `
+      <div class="success-panel">
+        <div class="success-icon">✅</div>
+        <h3>Order Confirmed!</h3>
+        <p>Your order #LM-${Math.floor(10000+Math.random()*90000)} has been placed.<br>
+        You'll receive a confirmation email shortly.</p>
+        <br>
+        <button class="pay-btn" onclick="closePayModal(); cart=[]; renderProducts(); updateCartUI();">Continue Shopping</button>
+      </div>`;
+    cart = [];
+    updateCartUI();
+    renderProducts();
+  }, 1800);
+}
+
+function formatCard(input) {
+  let v = input.value.replace(/\D/g, '').substring(0, 16);
+  input.value = v.replace(/(.{4})/g, '$1  ').trim();
+}
+
+function formatExpiry(input) {
+  let v = input.value.replace(/\D/g, '').substring(0, 4);
+  if (v.length >= 2) v = v.substring(0, 2) + ' / ' + v.substring(2);
+  input.value = v;
+}
+
+// ═══════════════════════════════════════════════
+//  I18N  O(1) per key via object lookup
+// ═══════════════════════════════════════════════
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.lang-btn').forEach(b => { if (b.textContent === lang.toUpperCase()) b.classList.add('active'); });
+  const t = i18n[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key]) el.textContent = t[key];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const key = el.getAttribute('data-i18n-ph');
+    if (t[key]) el.placeholder = t[key];
+  });
+  document.documentElement.lang = lang;
+  renderProducts();
+  updateCartUI();
+}
+
+// ═══════════════════════════════════════════════
+//  TOAST  lightweight notification
+// ═══════════════════════════════════════════════
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// ── INIT ──
+renderProducts();
+updateCartUI();
+</script>
+</body>
+</html>
